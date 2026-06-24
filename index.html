@@ -139,14 +139,17 @@
       .lvci-tablewrap{overflow:visible}
       #cidash-table{display:block;width:100%;border:0;background:transparent}
       #cidash-table thead{display:none}
-      #cidash-table tbody,#cidash-table tr,#cidash-table td{display:block;width:auto}
-      #cidash-table tr{border:1px solid var(--border);border-radius:10px;margin:0 0 12px;padding:8px 12px;background:var(--surface)}
-      #cidash-table td{border:0;padding:6px 0}
-      #cidash-table td.cidash-rev{max-width:none;padding:2px 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px}
-      #cidash-table td:not(.cidash-rev){display:flex!important;align-items:center;justify-content:space-between;gap:12px;text-align:left!important;min-width:0}
-      #cidash-table td:not(.cidash-rev)::before{content:attr(data-label);color:var(--fg-muted);font-size:.82em;font-weight:600;flex:1 1 auto;min-width:9rem;text-align:left}
-      #cidash-table td:not(.cidash-rev)>*{flex:0 0 auto;max-width:56%;text-align:right;justify-content:flex-end}
-      .cidash-chip,.run-badge{white-space:normal;text-align:right;justify-content:flex-end}
+      #cidash-table tbody{display:block;width:auto}
+      /* Each card lays its capability cells out as a responsive grid of compact
+         tiles (label above value) so they fill the card width instead of leaving
+         a wide empty gutter between a left-aligned label and right-aligned badge. */
+      #cidash-table tr{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 14px;border:1px solid var(--border);border-radius:10px;margin:0 0 12px;padding:12px 14px;background:var(--surface)}
+      #cidash-table td{display:block;width:auto;border:0;padding:0}
+      #cidash-table td.cidash-rev{grid-column:1/-1;max-width:none;padding:2px 0 10px;border-bottom:1px solid var(--border);margin-bottom:0}
+      #cidash-table td:not(.cidash-rev){display:flex!important;flex-direction:column;align-items:flex-start;gap:5px;text-align:left!important;min-width:0}
+      #cidash-table td:not(.cidash-rev)::before{content:attr(data-label);color:var(--fg-muted);font-size:.72em;font-weight:600;text-transform:uppercase;letter-spacing:.04em;min-width:0}
+      #cidash-table td:not(.cidash-rev)>*{max-width:100%}
+      .cidash-chip,.run-badge{white-space:normal;text-align:left;justify-content:flex-start}
     }
     @media(max-width:520px){
       .lvci-main{padding:10px}
@@ -154,10 +157,7 @@
       .lvci-ctxbar .cidash-search{padding:4px 9px}
       .lvci-ctxbar .cidash-segfilter button{padding:6px 8px}
       .lvci-ctxbar .cidash-colbtn{justify-content:flex-start;padding:7px 10px}
-      #cidash-table tr{padding:8px 10px;border-radius:8px}
-      #cidash-table td:not(.cidash-rev){gap:8px;flex-wrap:nowrap}
-      #cidash-table td:not(.cidash-rev)::before{flex:1 1 52%;min-width:0}
-      #cidash-table td:not(.cidash-rev)>*{max-width:48%}
+      #cidash-table tr{padding:10px 12px;border-radius:8px;gap:11px 12px}
       .cidash-rev{padding:8px 0}
       .cidash-rev-msg{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
       .cidash-rev-meta{flex-wrap:wrap;white-space:normal}
@@ -956,11 +956,12 @@
     }
     function bfShow(){
       var c=bfCard(); if(!c) return;
-      // Hide on a repo we've dismissed, or once anything has been queued from here
-      // ("disappear after anything is run"); otherwise show with a live count.
-      var queued = Object.keys(qLoad()).length > 0;
-      if(bfDismissed() || queued){ c.style.display='none'; return; }
       var cells=bfCells(); if(!cells.length){ c.style.display='none'; return; }
+      // Hide on a repo we've dismissed, or once this dashboard has queued one of
+      // its own cells ("disappear after anything is run"); otherwise show with a live count.
+      var queued = qLoad();
+      var queuedHere = cells.some(function(x){ return !!queued[x.cap+'|'+x.sha]; });
+      if(bfDismissed() || queuedHere){ c.style.display='none'; return; }
       var shas={}; cells.forEach(function(x){ shas[x.sha]=1; });
       var n=document.getElementById('lvci-bf-count'); if(n) n.textContent=String(Object.keys(shas).length);
       c.style.display='';
@@ -1494,7 +1495,7 @@
   </script>
   <main class="lvci-main">
   <h1>CI Dashboard — LabVIEW-CI-Test18</h1>
-  <div class="sub">Last updated: 2026-06-24 21:28 UTC &nbsp;|&nbsp; Auto-refreshes every 15 min</div>
+  <div class="sub">Last updated: 2026-06-24 21:39 UTC &nbsp;|&nbsp; Auto-refreshes every 15 min</div>
   <div class="nav">
     <a href="https://github.com/elijah286/LabVIEW-CI-Test18">GitHub</a>
     <a href="https://github.com/elijah286/LabVIEW-CI-Test18/actions">Actions</a>
@@ -1538,6 +1539,24 @@
       </tr>
     </thead>
     <tbody>
+    <tr data-project="false" data-deponly="false">
+      <td class="cidash-rev">
+        <div class="cidash-rev-wrap">
+          <span class="cidash-avatar" style="background:hsl(66,42%,45%)" title="Elijah Kerry" aria-hidden="true">E</span>
+          <div class="cidash-rev-body">
+            <div class="cidash-rev-line1"><a href="https://elijah286.github.io/LabVIEW-CI-Test18/vi-snapshots/index.html?sha=a6d5768dee8ceb39f0960d06d6c3f4b0bca5c0e5" class="cidash-rev-msg" title="Add LabVIEW CI pipeline">Add LabVIEW CI pipeline</a></div>
+            <div class="cidash-rev-meta"><a href="https://elijah286.github.io/LabVIEW-CI-Test18/vi-snapshots/index.html?sha=a6d5768dee8ceb39f0960d06d6c3f4b0bca5c0e5" class="cidash-rev-sha" title="Browse this revision's VIs in the VI Browser">a6d5768</a><span class="cidash-rev-dot">&middot;</span>Elijah Kerry<span class="cidash-rev-dot">&middot;</span>2026-06-24</div>
+          </div>
+        </div>
+      </td>
+      <td style="text-align:center;color:var(--fg-muted);font-size:.75em">—</td>
+      <td style="text-align:center;color:var(--fg-muted);font-size:.75em">—</td>
+      <td style="text-align:center;color:var(--fg-muted);font-size:.75em">—</td>
+      <td style="text-align:center;color:var(--fg-muted);font-size:.75em">—</td>
+      <td style="text-align:center;color:var(--fg-muted);font-size:.75em">—</td>
+      <td style="text-align:center;color:var(--fg-muted);font-size:.75em">—</td>
+    </tr>
+
     <tr data-project="false" data-deponly="false">
       <td class="cidash-rev">
         <div class="cidash-rev-wrap">

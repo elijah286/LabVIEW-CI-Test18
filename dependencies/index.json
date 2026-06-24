@@ -1,8 +1,15 @@
 {
   "schema": 1,
   "repo": "elijah286/LabVIEW-CI-Test18",
-  "sha": "baf31e6310b22fcfa01ecd2d5984bc3ffd0dcc19",
+  "sha": "a6d5768dee8ceb39f0960d06d6c3f4b0bca5c0e5",
   "revisions": [
+    {
+      "sha": "a6d5768dee8ceb39f0960d06d6c3f4b0bca5c0e5",
+      "short": "a6d5768",
+      "message": "Add LabVIEW CI pipeline",
+      "author": "Elijah Kerry",
+      "date": "2026-06-24T21:39:22Z"
+    },
     {
       "sha": "baf31e6310b22fcfa01ecd2d5984bc3ffd0dcc19",
       "short": "baf31e6",
@@ -21,14 +28,20 @@
   "config": {
     "use": "",
     "actions": {},
-    "vipc": []
+    "vipc": [],
+    "dragon": [],
+    "hasVipcList": false,
+    "hasDragonList": false
   },
   "vipc": [
     {
       "path": ".github/labview/vipm/ci-tooling.vipc",
       "role": "core",
       "capability": "",
+      "tooling": true,
       "configured": true,
+      "monitored": true,
+      "locked": true,
       "packages": [
         "dataflow_g_lib_g_image-0.5.0.1",
         "jki_lib_caraya-1.4.4.148",
@@ -42,7 +55,10 @@
       "path": "COTC Dependencies.vipc",
       "role": "project",
       "capability": "",
+      "tooling": false,
       "configured": true,
+      "monitored": true,
+      "locked": false,
       "packages": [
         "dataflow_g_lib_g_image-0.5.0.1",
         "oglib_appcontrol-4.1.0.7",
